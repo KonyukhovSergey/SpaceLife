@@ -104,7 +104,12 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		gl.glRotatef(45, 1, 0, 0);
 		gl.glColor4f(1, 1, 1, 0);
 		ship.setupBuffers(gl);
-for(int i=0;i<64;i++)		ship.draw(gl);
+		
+		for (int i = 0; i < 16; i++)
+		{
+			gl.glRotatef(20, 0, 0, 1);
+			ship.draw(gl);
+		}
 		gl.glPopMatrix();
 
 		fps.frameDone();
