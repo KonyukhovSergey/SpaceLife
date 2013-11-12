@@ -5,12 +5,15 @@ import java.nio.Buffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
 
 import js.engine.FrameRateCalculator;
 import js.engine.FrameRateCalculator.FrameRateUpdateInterface;
+import js.gles11.tools.Light;
+import js.gles11.tools.Lighting;
+import js.utils.TimeCounter;
 import net.rbgrn.android.glwallpaperservice.GLWallpaperService;
 import android.content.Context;
+import android.graphics.LightingColorFilter;
 import android.opengl.GLU;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,6 +25,8 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 	private FrameRateCalculator fps;
 
 	private ObjectMCX ship = null;
+	private Light light = new Light();
+	private TimeCounter timeCounter = new TimeCounter();
 
 	public WallpaperRenderer(Context context)
 	{
@@ -66,16 +71,6 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		// gl.glColorMaterial(GL10.GL_FRONT, GL10.GL_SPECULAR);
 		gl.glEnable(GL10.GL_COLOR_MATERIAL);
 
-		/*
-		 * glEnable(GL_FOG); glFogi(GL_FOG_MODE,GL_EXP);
-		 * glFogfv(GL_FOG_COLOR,fog); glFogf(GL_FOG_DENSITY,0.02);
-		 */
-
-		// somelight.InitLight();
-		// somelight.SetDiffuseColor(1.0f, 1.0f, 0.0f);
-		// somelight.SetSpecularColor(1.0f, 1.0f, 0.0f);
-		// somelight.SetProfile(1.0f, 0.05f, 0.0f);
-
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 	}
 
@@ -90,6 +85,10 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		gl.glLoadIdentity();
 		GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 2.0f, 2000.0f);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
+
+		Lighting.on(gl);
+		Lighting.setModelAmbient(gl, 0.1f, 0.1f, 0.1f, 1);
+		light.init(gl, 0).setPosition(100, 100, 100).on();
 	}
 
 	@Override
@@ -101,13 +100,13 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, -100);
-		gl.glRotatef(45, 1, 0, 0);
+		gl.glRotatef(timeCounter.elapsed() * 50.0f, 1, 0, 0);
 		gl.glColor4f(1, 1, 1, 0);
 		ship.setupBuffers(gl);
-		
-		for (int i = 0; i < 16; i++)
+
+		// for (int i = 0; i < 16; i++)
 		{
-			gl.glRotatef(20, 0, 0, 1);
+			// gl.glRotatef(20, 0, 0, 1);
 			ship.draw(gl);
 		}
 		gl.glPopMatrix();
