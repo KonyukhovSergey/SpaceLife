@@ -71,13 +71,13 @@ public class Ship extends Basis
 		gl.glPopMatrix();
 	}
 
-	public void solveFlyTo(Vector3D pos, float minDist, float maxDist, float dt)
+	public void solveFlyTo(float x,float y,float z, float minDist, float maxDist, float dt)
 	{
 		float pf, pr, pu, plen, dist, lx, ly, lz, spd_acs, t;
 
-		lx = px - pos.x;
-		ly = py - pos.y;
-		lz = pz - pos.z;
+		lx = px - x;
+		ly = py - y;
+		lz = pz - z;
 
 		pf = lx * fx + ly * fy + lz * fz;
 		pr = lx * rx + ly * ry + lz * rz;

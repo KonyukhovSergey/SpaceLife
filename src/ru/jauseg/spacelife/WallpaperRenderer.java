@@ -28,6 +28,8 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 	private Light light = new Light();
 	private TimeCounter timeCounter = new TimeCounter();
 
+	private WorldController wc = new WorldController();
+
 	public WallpaperRenderer(Context context)
 	{
 		fps = new FrameRateCalculator(this);
@@ -82,35 +84,28 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		gl.glViewport(0, 0, width, height);
 
 		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
+		
 		GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 2.0f, 2000.0f);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 
 		Lighting.on(gl);
 		Lighting.setModelAmbient(gl, 0.1f, 0.1f, 0.1f, 1);
-		light.init(gl, 0).setPosition(100, 100, 100).on();
+		 light.init(gl, 0).setPosition(100, 100, 100).on();
+		wc.init(gl, 32, ship);
 	}
 
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
 		fps.frameBegin();
-
+		gl.glLoadIdentity();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-		gl.glPushMatrix();
-		gl.glTranslatef(0, 0, -100);
-		gl.glRotatef(timeCounter.elapsed() * 50.0f, 1, 0, 0);
-		gl.glColor4f(1, 1, 1, 0);
-		ship.setupBuffers(gl);
-
-		// for (int i = 0; i < 16; i++)
-		{
-			// gl.glRotatef(20, 0, 0, 1);
-			ship.draw(gl);
-		}
-		gl.glPopMatrix();
-
+		wc.draw(gl);
+		float dt = timeCounter.delta();
+		
+		wc.timeTick(dt);
+		wc.controlWorld(dt);
 		fps.frameDone();
 	}
 
