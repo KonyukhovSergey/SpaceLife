@@ -29,8 +29,8 @@ public class WorldController
 		while (count-- > 0)
 		{
 			Ship ship = new Ship();
-			ship.init(app.rnd(SHIP_DISP / 2, SHIP_DISP), app.rnd(SHIP_DISP / 2, SHIP_DISP),
-					app.rnd(SHIP_DISP / 2, SHIP_DISP), mcxShip);
+			ship.init(app.rnd(-SHIP_DISP / 2, SHIP_DISP), app.rnd(-SHIP_DISP / 2, SHIP_DISP),
+					app.rnd(-SHIP_DISP / 2, SHIP_DISP), mcxShip);
 			ship.rotate(app.rnd(0, 8), app.rnd(0, 8), app.rnd(0, 8));
 			ships.add(ship);
 		}
@@ -41,8 +41,8 @@ public class WorldController
 	public void draw(GL10 gl)
 	{
 		Ship ship0 = ships.get(0);
-		ship0.setCamera(gl);
-		light.setPosition(ship0.px, ship0.py, ship0.pz);
+		//ship0.setCamera(gl);
+		//light.setPosition(ship0.px, ship0.py, ship0.pz);
 //GLU.gluLookAt(gl, 0, 100, 0, 0, 0, 0, 0, 0, 1);
 		ship0.mcx.setupBuffers(gl);
 

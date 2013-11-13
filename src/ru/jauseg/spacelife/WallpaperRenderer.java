@@ -13,7 +13,6 @@ import js.gles11.tools.Lighting;
 import js.utils.TimeCounter;
 import net.rbgrn.android.glwallpaperservice.GLWallpaperService;
 import android.content.Context;
-import android.graphics.LightingColorFilter;
 import android.opengl.GLU;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -49,9 +48,6 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 	{
 		Log.v(TAG, "onSurfaceCreated");
 
-		float[] cl0 = new float[] { 0.75f, 0.75f, 0.75f, 1.0f };
-		float[] fog = new float[] { 0.0f, 0.5f, 0.75f, 1.0f };
-
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gl.glClearDepthf(1.0f);
 		gl.glDepthFunc(GL10.GL_LESS);
@@ -70,7 +66,6 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		gl.glEnable(GL10.GL_LIGHTING);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glEnable(GL10.GL_COLOR_MATERIAL);
-		// gl.glColorMaterial(GL10.GL_FRONT, GL10.GL_SPECULAR);
 		gl.glEnable(GL10.GL_COLOR_MATERIAL);
 
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -84,14 +79,14 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		gl.glViewport(0, 0, width, height);
 
 		gl.glMatrixMode(GL10.GL_PROJECTION);
-		
+
 		GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 2.0f, 2000.0f);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 
-		Lighting.on(gl);
-		Lighting.setModelAmbient(gl, 0.1f, 0.1f, 0.1f, 1);
-		 light.init(gl, 0).setPosition(100, 100, 100).on();
-		wc.init(gl, 32, ship);
+//		Lighting.on(gl);
+//		Lighting.setModelAmbient(gl, 0.1f, 0.1f, 0.1f, 1);
+//		light.init(gl, 0).setPosition(100, 100, 100).on();
+		wc.init(gl, 64, ship);
 	}
 
 	@Override
@@ -100,10 +95,12 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		fps.frameBegin();
 		gl.glLoadIdentity();
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		
+		gl.glTranslatef(0, 0, -1500);
 
 		wc.draw(gl);
 		float dt = timeCounter.delta();
-		
+
 		wc.timeTick(dt);
 		wc.controlWorld(dt);
 		fps.frameDone();
