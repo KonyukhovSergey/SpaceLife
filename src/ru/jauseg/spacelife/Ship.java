@@ -2,6 +2,7 @@ package ru.jauseg.spacelife;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import js.engine.ObjectMCX;
 import js.math.Basis;
 import js.math.Vector3D;
 
@@ -11,8 +12,6 @@ public class Ship extends Basis
 	private static final float KEYBOARD_ROTATE_VALUE = 0.02f;
 
 	public int fraction;
-
-	public ObjectMCX mcx = null;
 
 	public Vector3D velosity = new Vector3D();
 	public float spr_lr, spr_ud, spr_cw;
@@ -48,13 +47,11 @@ public class Ship extends Basis
 		spr_cw += acs_cw;
 	}
 
-	public void init(float x, float y, float z, ObjectMCX mcx)
+	public void init(float x, float y, float z)
 	{
 		moveTo(x, y, z);
 
 		velosity.set(0, 0, 0);
-
-		this.mcx = mcx;
 
 		min_dist = app.rnd(10, 50);
 		max_dist = app.rnd(min_dist, 20.0f);
@@ -62,7 +59,7 @@ public class Ship extends Basis
 		rotate(0.0f, 0.0f, 3.1415962f);
 	}
 
-	public void draw(GL10 gl)
+	public void draw(GL10 gl, ObjectMCX mcx)
 	{
 		gl.glPushMatrix();
 		transform(gl);
@@ -71,7 +68,7 @@ public class Ship extends Basis
 		gl.glPopMatrix();
 	}
 
-	public void solveFlyTo(float x,float y,float z, float minDist, float maxDist, float dt)
+	public void solveFlyTo(float x, float y, float z, float minDist, float maxDist, float dt)
 	{
 		float pf, pr, pu, plen, dist, lx, ly, lz, spd_acs, t;
 
