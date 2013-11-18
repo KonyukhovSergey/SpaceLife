@@ -29,17 +29,14 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 	private Light light = new Light();
 	private TimeCounter timeCounter = new TimeCounter();
 
-	private WorldController wc = new WorldController();
+	private WorldController wc;
 
-	private TextureManager tm = new TextureManager();
 	private int textureSky = -1;
-	
-	
 
 	public WallpaperRenderer(Context context)
 	{
 		Log.v(TAG, "construct");
-		
+
 		fps = new FrameRateCalculator(this);
 
 		if (app.bitmapSphere == null)
@@ -49,19 +46,22 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 			{
 				app.mcxShip = new ObjectMCX(context.getAssets().open("ship.mcx"), 0.4f);
 				app.mcxSphere = new ObjectMCX(context.getAssets().open("sky3.mcx"), 2f);
+				app.wc.init(32);
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
 		}
+
+		wc = app.wc;
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		Log.v(TAG, "onSurfaceCreated");
-		
+
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gl.glClearDepthf(1.0f);
 		gl.glDepthFunc(GL10.GL_LESS);
@@ -76,9 +76,9 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		gl.glEnable(GL10.GL_COLOR_MATERIAL);
 		gl.glEnable(GL10.GL_COLOR_MATERIAL);
 
-		if(textureSky<0){
-			textureSky = tm.createTexture(gl, app.bitmapSphere, false);
-			
+		if (textureSky < 0)
+		{
+			textureSky = app.tm.createTexture(gl, app.bitmapSphere, false);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class WallpaperRenderer implements GLWallpaperService.Renderer, FrameRate
 		GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 2.0f, 2000.0f);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 
-		wc.init(gl, 32);
+		
 	}
 
 	@Override

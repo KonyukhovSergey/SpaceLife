@@ -20,7 +20,7 @@ public class WorldController
 	public List<Ship> ships = new ArrayList<Ship>();
 	private Light light = new Light();
 
-	public void init(GL10 gl, int count)
+	public void init(int count)
 	{
 		while (count-- > 0)
 		{
@@ -30,12 +30,11 @@ public class WorldController
 			ship.rotate(app.rnd(0, 8), app.rnd(0, 8), app.rnd(0, 8));
 			ships.add(ship);
 		}
-
-		light.init(gl, 0).on();
 	}
 
 	public void draw(GL10 gl)
 	{
+		light.init(gl, 0).on();
 		Ship ship0 = ships.get(0);
 		ship0.setCamera(gl);
 		light.setPosition(ship0.px, ship0.py, ship0.pz);

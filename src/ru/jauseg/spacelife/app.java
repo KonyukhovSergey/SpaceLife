@@ -3,6 +3,7 @@ package ru.jauseg.spacelife;
 import java.util.Random;
 
 import js.engine.ObjectMCX;
+import js.engine.TextureManager;
 
 import android.app.Application;
 import android.graphics.Bitmap;
@@ -16,6 +17,10 @@ public class app extends Application
 	
 	public static ObjectMCX mcxShip = null;
 	public static ObjectMCX mcxSphere = null;
+	
+	public static WorldController wc = new WorldController();
+	public static TextureManager tm = new TextureManager();
+	
 
 	public final static float rnd()
 	{
